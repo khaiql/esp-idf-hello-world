@@ -12,5 +12,10 @@
     "--background-index",
     "--query-driver=/Users/sle/.espressif/tools/xtensa-esp-elf/esp-14.2.0_20251107/xtensa-esp-elf/bin/xtensa-esp32-elf-gcc",
     "--compile-commands-dir=/Users/sle/Documents/PlatformIO/Projects/260114-213310-espidf-hello-world/build"
-  ]
+  ],
+  "idf.espIdfPath": "/Users/sle/esp/v5.5.2/esp-idf",
+  "idf.toolsPath": "/Users/sle/.espressif",
+  "idf.flashType": "UART",
+  "idf.monitorPort": "/dev/tty.usbserial-2130",
+  "idf.port": "/dev/tty.usbserial-2130"
 }
