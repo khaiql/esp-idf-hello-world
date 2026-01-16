@@ -17,6 +17,12 @@ namespace myapp
     {
     public:
         explicit WifiManager(const char *ssid, const char *password);
+        ~WifiManager()
+        {
+            esp_event_handler_instance_unregister(WIFI_EVENT, ESP_EVENT_ANY_ID, instance_any_id);
+            esp_event_handler_instance_unregister(IP_EVENT, IP_EVENT_STA_GOT_IP, instance_got_ip);
+            vEventGroupDelete(wifi_event_group);
+        }
         void setup_wifi();
         static void event_handler(void *arg, esp_event_base_t event_base,
                                   int32_t event_id, void *event_data);

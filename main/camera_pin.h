@@ -40,5 +40,5 @@
 #define CAM_PIN_HREF 2
 #define CAM_PIN_PCLK 15
 
-#define LED_GPIO_NUM 47
+#define CAM_PIN_FLASH GPIO_NUM_3
 #endif

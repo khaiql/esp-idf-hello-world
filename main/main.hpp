@@ -8,6 +8,7 @@
 #include "driver/gpio.h"
 #include "wifi_manager.hpp"
 #include "nvs_flash.h"
+#include "cat_detect.hpp"
 
 namespace myapp
 {
@@ -15,13 +16,16 @@ namespace myapp
     {
     public:
         CameraApp();
+        ~CameraApp();
         esp_err_t setup_camera();
         esp_err_t capture_image();
         static void capture_task(void *pvParameters);
         static constexpr const char *TAG = "camera_app";
         void set_flash(bool on);
+        void run_inference(const camera_fb_t *fb);
 
     private:
+        CatDetect *detect;
         uint8_t current_tick = 0;
         static constexpr gpio_config_t io_config = gpio_config_t{
             .pin_bit_mask = (1ULL << CAM_PIN_FLASH),
@@ -52,7 +56,7 @@ namespace myapp
             .ledc_timer = LEDC_TIMER_0,
             .ledc_channel = LEDC_CHANNEL_0,
             .pixel_format = PIXFORMAT_JPEG,
-            .frame_size = FRAMESIZE_UXGA,
+            .frame_size = FRAMESIZE_VGA,
             .jpeg_quality = 12,
             .fb_count = 1,
             .fb_location = CAMERA_FB_IN_PSRAM,

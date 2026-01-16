@@ -1,8 +1,3 @@
-//
-// !!! WARNING !!! AUTO-GENERATED FILE!
-// PLEASE DO NOT MODIFY IT AND USE "platformio.ini":
-// https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags
-//
 {
     "configurations": [
         {
@@ -13,7 +8,6 @@
                 "/Users/sle/.platformio/packages/framework-espidf/components/xtensa/esp32/include",
                 "/Users/sle/.platformio/packages/framework-espidf/components/xtensa/include",
                 "/Users/sle/.platformio/packages/framework-espidf/components/xtensa/deprecated_include",
-                "/Users/sle/Projects/260114-213310-espidf-hello-world/.pio/build/esp32dev/config",
                 "/Users/sle/.platformio/packages/framework-espidf/components/newlib/platform_include",
                 "/Users/sle/.platformio/packages/framework-espidf/components/freertos/config/include",
                 "/Users/sle/.platformio/packages/framework-espidf/components/freertos/config/include/freertos",
@@ -233,7 +227,9 @@
                 "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp_jpeg/include",
                 "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp32-camera/driver/include",
                 "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp32-camera/conversions/include",
-                ""
+                "",
+                "${workspaceFolder}/.pio/build/esp32s3dev/config",
+                "${workspaceFolder}/components/cat_detect"
             ],
             "browse": {
                 "limitSymbolsToIncludedHeaders": true,
@@ -243,7 +239,6 @@
                     "/Users/sle/.platformio/packages/framework-espidf/components/xtensa/esp32/include",
                     "/Users/sle/.platformio/packages/framework-espidf/components/xtensa/include",
                     "/Users/sle/.platformio/packages/framework-espidf/components/xtensa/deprecated_include",
-                    "/Users/sle/Projects/260114-213310-espidf-hello-world/.pio/build/esp32dev/config",
                     "/Users/sle/.platformio/packages/framework-espidf/components/newlib/platform_include",
                     "/Users/sle/.platformio/packages/framework-espidf/components/freertos/config/include",
                     "/Users/sle/.platformio/packages/framework-espidf/components/freertos/config/include/freertos",

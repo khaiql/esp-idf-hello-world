@@ -1,7 +1,15 @@
 #include "main.hpp"
+#include "dl_image_jpeg.hpp"
 
 myapp::CameraApp::CameraApp()
 {
+    detect = new CatDetect();
+    detect->get_raw_model(0)->profile_memory();
+}
+
+myapp::CameraApp::~CameraApp()
+{
+    delete detect;
 }
 
 esp_err_t myapp::CameraApp::setup_camera()
@@ -31,8 +39,39 @@ esp_err_t myapp::CameraApp::capture_image()
         return ESP_FAIL;
     }
     ESP_LOGI(TAG, "Captured image: %zu bytes", fb->len);
+    run_inference(fb);
     esp_camera_fb_return(fb);
     return ESP_OK;
+}
+
+void myapp::CameraApp::run_inference(const camera_fb_t *fb)
+{
+    uint32_t start_decode = esp_log_timestamp();
+    dl::image::jpeg_img_t jpeg_img = {
+        .data = fb->buf,
+        .data_len = fb->len,
+    };
+    auto img = dl::image::sw_decode_jpeg(jpeg_img, dl::image::DL_IMAGE_PIX_TYPE_RGB888);
+    uint32_t end_decode = esp_log_timestamp();
+    ESP_LOGI(TAG, "JPEG decode took %lu ms", end_decode - start_decode);
+
+    uint32_t start_infer = esp_log_timestamp();
+    auto &detect_results = detect->run(img);
+    uint32_t end_infer = esp_log_timestamp();
+    ESP_LOGI(TAG, "Inference took %lu ms", end_infer - start_infer);
+
+    for (const auto &res : detect_results)
+    {
+        ESP_LOGI(TAG,
+                 "[category: %d, score: %f, x1: %d, y1: %d, x2: %d, y2: %d]",
+                 res.category,
+                 res.score,
+                 res.box[0],
+                 res.box[1],
+                 res.box[2],
+                 res.box[3]);
+    }
+    heap_caps_free(img.data);
 }
 
 void myapp::CameraApp::capture_task(void *pvParameters)
@@ -56,7 +95,7 @@ void myapp::CameraApp::capture_task(void *pvParameters)
         {
             ESP_LOGE(TAG, "Camera capture failed with error 0x%x", err);
         }
-        vTaskDelay(pdMS_TO_TICKS(1000)); // Capture an image every 2 seconds
+        vTaskDelay(pdMS_TO_TICKS(1000));
     }
 }
 
