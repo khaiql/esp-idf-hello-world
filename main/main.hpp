@@ -9,20 +9,29 @@
 #include "wifi_manager.hpp"
 #include "nvs_flash.h"
 #include "cat_detect.hpp"
+#include "esp_http_server.h"
 
 namespace myapp
 {
+    static esp_err_t stream_handler(httpd_req_t *req);
+#define PART_BOUNDARY "123456789000000000000987654321"
+    static const char *_STREAM_CONTENT_TYPE = "multipart/x-mixed-replace;boundary=" PART_BOUNDARY;
+    static const char *_STREAM_BOUNDARY = "\r\n--" PART_BOUNDARY "\r\n";
+    static const char *_STREAM_PART = "Content-Type: image/jpeg\r\nContent-Length: %u\r\n\r\n";
+
     class CameraApp
     {
     public:
         CameraApp();
         ~CameraApp();
         esp_err_t setup_camera();
-        esp_err_t capture_image();
-        static void capture_task(void *pvParameters);
+        esp_err_t setup_model();
+        httpd_handle_t start_http_server_task();
+        static void run_inference_task(void *pvParameters);
         static constexpr const char *TAG = "camera_app";
-        void set_flash(bool on);
         void run_inference(const camera_fb_t *fb);
+        TaskHandle_t ai_task_handler;
+        camera_fb_t *inference_fb;
 
     private:
         CatDetect *detect;
@@ -58,9 +67,9 @@ namespace myapp
             .pixel_format = PIXFORMAT_JPEG,
             .frame_size = FRAMESIZE_VGA,
             .jpeg_quality = 12,
-            .fb_count = 1,
+            .fb_count = 3,
             .fb_location = CAMERA_FB_IN_PSRAM,
-            .grab_mode = CAMERA_GRAB_WHEN_EMPTY,
+            .grab_mode = CAMERA_GRAB_LATEST,
             .sccb_i2c_port = 0};
     };
 } // namespace camera_app

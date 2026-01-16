@@ -3,8 +3,6 @@
 
 myapp::CameraApp::CameraApp()
 {
-    detect = new CatDetect();
-    detect->get_raw_model(0)->profile_memory();
 }
 
 myapp::CameraApp::~CameraApp()
@@ -21,6 +19,11 @@ esp_err_t myapp::CameraApp::setup_camera()
         return err;
     }
 
+    sensor_t *s = esp_camera_sensor_get();
+    s->set_vflip(s, 1); // Flip vertically
+    s->set_brightness(s, 1);
+    s->set_saturation(s, -2);
+    s->set_awb_gain(s, 1); // Enabled AWB gain control
     err = gpio_config(&io_config);
     if (err != ESP_OK)
     {
@@ -30,18 +33,47 @@ esp_err_t myapp::CameraApp::setup_camera()
     return ESP_OK;
 }
 
-esp_err_t myapp::CameraApp::capture_image()
+esp_err_t myapp::CameraApp::setup_model()
 {
-    camera_fb_t *fb = esp_camera_fb_get();
-    if (!fb)
-    {
-        ESP_LOGE(TAG, "Camera Capture Failed");
-        return ESP_FAIL;
-    }
-    ESP_LOGI(TAG, "Captured image: %zu bytes", fb->len);
-    run_inference(fb);
-    esp_camera_fb_return(fb);
+    detect = new CatDetect();
     return ESP_OK;
+}
+
+httpd_handle_t myapp::CameraApp::start_http_server_task()
+{
+    httpd_config_t config = HTTPD_DEFAULT_CONFIG();
+    config.server_port = 80;
+    config.ctrl_port = 32768;
+
+    httpd_handle_t server = NULL;
+    if (httpd_start(&server, &config) == ESP_OK)
+    {
+        // Stream Endpoint
+        httpd_uri_t stream_uri = {
+            .uri = "/stream",
+            .method = HTTP_GET,
+            .handler = stream_handler,
+            .user_ctx = this};
+        httpd_register_uri_handler(server, &stream_uri);
+    }
+    return server;
+}
+
+void myapp::CameraApp::run_inference_task(void *pvParameters)
+{
+    auto app = static_cast<myapp::CameraApp *>(pvParameters);
+    while (1)
+    {
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+        if (app->inference_fb)
+        {
+            app->run_inference(app->inference_fb);
+
+            // AI is finally done, NOW we return the buffer to the camera driver
+            esp_camera_fb_return(app->inference_fb);
+            app->inference_fb = NULL;
+        }
+    }
 }
 
 void myapp::CameraApp::run_inference(const camera_fb_t *fb)
@@ -74,41 +106,53 @@ void myapp::CameraApp::run_inference(const camera_fb_t *fb)
     heap_caps_free(img.data);
 }
 
-void myapp::CameraApp::capture_task(void *pvParameters)
+static esp_err_t myapp::stream_handler(httpd_req_t *req)
 {
-    myapp::CameraApp *app = static_cast<myapp::CameraApp *>(pvParameters);
+    camera_fb_t *fb = NULL;
+    esp_err_t res = ESP_OK;
+    char *part_buf[64];
 
-    while (1)
+    httpd_resp_set_type(req, _STREAM_CONTENT_TYPE);
+    auto app = static_cast<myapp::CameraApp *>(req->user_ctx);
+
+    while (true)
     {
-        app->current_tick++;
-        ESP_LOGI(TAG, "Capture tick %d", app->current_tick);
-        if (app->current_tick % 10 == 0)
+        fb = esp_camera_fb_get();
+        if (!fb)
         {
-            app->set_flash(true);
+            ESP_LOGE("HTTP", "Camera capture failed");
+            res = ESP_FAIL;
+            break;
+        }
+
+        // 1. Send the boundary
+        res = httpd_resp_send_chunk(req, _STREAM_BOUNDARY, strlen(_STREAM_BOUNDARY));
+
+        // 2. Send the header (JPEG length)
+        size_t hlen = snprintf((char *)part_buf, 64, _STREAM_PART, fb->len);
+        res = httpd_resp_send_chunk(req, (const char *)part_buf, hlen);
+
+        // 3. Send the actual JPEG data
+        res = httpd_resp_send_chunk(req, (const char *)fb->buf, fb->len);
+
+        // --- HANDOVER LOGIC FOR AI ---
+        // If AI is idle, hand it this buffer.
+        // If AI is busy, we MUST return it now so the camera can reuse it.
+        if (app->inference_fb == NULL)
+        {
+            app->inference_fb = fb;
+            xTaskNotifyGive(app->ai_task_handler);
+            // We do NOT return fb here; inference_task will do it.
         }
         else
         {
-            app->set_flash(false);
+            esp_camera_fb_return(fb);
         }
-        esp_err_t err = app->capture_image();
-        if (err != ESP_OK)
-        {
-            ESP_LOGE(TAG, "Camera capture failed with error 0x%x", err);
-        }
-        vTaskDelay(pdMS_TO_TICKS(1000));
-    }
-}
 
-void myapp::CameraApp::set_flash(bool on)
-{
-    if (on)
-    {
-        gpio_set_level(CAM_PIN_FLASH, 1);
+        if (res != ESP_OK)
+            break;
     }
-    else
-    {
-        gpio_set_level(CAM_PIN_FLASH, 0);
-    }
+    return res;
 }
 
 extern "C" void app_main()
@@ -123,15 +167,19 @@ extern "C" void app_main()
     ESP_ERROR_CHECK(ret);
 
     static myapp::CameraApp camera_app;
+
     myapp::WifiManager wifi_manager = myapp::WifiManager("chi-ngao", "khongcopass");
     wifi_manager.setup_wifi();
 
     esp_err_t err = camera_app.setup_camera();
+    camera_app.setup_model();
     ESP_LOGI(myapp::CameraApp::TAG, "Running with cpp");
     if (err != ESP_OK)
     {
         ESP_LOGE(myapp::CameraApp::TAG, "Camera init failed with error 0x%x", err);
         return;
     }
-    xTaskCreate(myapp::CameraApp::capture_task, "camera_capture_task", 4096, &camera_app, tskIDLE_PRIORITY, NULL);
+
+    xTaskCreatePinnedToCore(myapp::CameraApp::run_inference_task, "ai_task", 16384, &camera_app, tskIDLE_PRIORITY, &camera_app.ai_task_handler, 1);
+    camera_app.start_http_server_task();
 }

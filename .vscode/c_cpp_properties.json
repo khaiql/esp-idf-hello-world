@@ -1,3 +1,8 @@
+//
+// !!! WARNING !!! AUTO-GENERATED FILE!
+// PLEASE DO NOT MODIFY IT AND USE "platformio.ini":
+// https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags
+//
 {
     "configurations": [
         {
@@ -8,6 +13,7 @@
                 "/Users/sle/.platformio/packages/framework-espidf/components/xtensa/esp32/include",
                 "/Users/sle/.platformio/packages/framework-espidf/components/xtensa/include",
                 "/Users/sle/.platformio/packages/framework-espidf/components/xtensa/deprecated_include",
+                "/Users/sle/Projects/260114-213310-espidf-hello-world/.pio/build/esp32dev/config",
                 "/Users/sle/.platformio/packages/framework-espidf/components/newlib/platform_include",
                 "/Users/sle/.platformio/packages/framework-espidf/components/freertos/config/include",
                 "/Users/sle/.platformio/packages/framework-espidf/components/freertos/config/include/freertos",
@@ -171,6 +177,9 @@
                 "/Users/sle/.platformio/packages/framework-espidf/components/rt/include",
                 "/Users/sle/.platformio/packages/framework-espidf/components/spiffs/include",
                 "/Users/sle/.platformio/packages/framework-espidf/components/wifi_provisioning/include",
+                "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp_jpeg/include",
+                "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp32-camera/driver/include",
+                "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp32-camera/conversions/include",
                 "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__dl_fft",
                 "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__dl_fft/base",
                 "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__dl_fft/base/isa",
@@ -224,12 +233,8 @@
                 "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp-dl/audio/common",
                 "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp-dl/audio/speech_features",
                 "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp-dl/dl/base/isa/xtensa",
-                "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp_jpeg/include",
-                "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp32-camera/driver/include",
-                "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp32-camera/conversions/include",
-                "",
-                "${workspaceFolder}/.pio/build/esp32s3dev/config",
-                "${workspaceFolder}/components/cat_detect"
+                "/Users/sle/Projects/260114-213310-espidf-hello-world/components/cat_detect",
+                ""
             ],
             "browse": {
                 "limitSymbolsToIncludedHeaders": true,
@@ -239,6 +244,7 @@
                     "/Users/sle/.platformio/packages/framework-espidf/components/xtensa/esp32/include",
                     "/Users/sle/.platformio/packages/framework-espidf/components/xtensa/include",
                     "/Users/sle/.platformio/packages/framework-espidf/components/xtensa/deprecated_include",
+                    "/Users/sle/Projects/260114-213310-espidf-hello-world/.pio/build/esp32dev/config",
                     "/Users/sle/.platformio/packages/framework-espidf/components/newlib/platform_include",
                     "/Users/sle/.platformio/packages/framework-espidf/components/freertos/config/include",
                     "/Users/sle/.platformio/packages/framework-espidf/components/freertos/config/include/freertos",
@@ -402,6 +408,9 @@
                     "/Users/sle/.platformio/packages/framework-espidf/components/rt/include",
                     "/Users/sle/.platformio/packages/framework-espidf/components/spiffs/include",
                     "/Users/sle/.platformio/packages/framework-espidf/components/wifi_provisioning/include",
+                    "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp_jpeg/include",
+                    "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp32-camera/driver/include",
+                    "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp32-camera/conversions/include",
                     "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__dl_fft",
                     "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__dl_fft/base",
                     "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__dl_fft/base/isa",
@@ -455,9 +464,7 @@
                     "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp-dl/audio/common",
                     "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp-dl/audio/speech_features",
                     "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp-dl/dl/base/isa/xtensa",
-                    "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp_jpeg/include",
-                    "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp32-camera/driver/include",
-                    "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp32-camera/conversions/include",
+                    "/Users/sle/Projects/260114-213310-espidf-hello-world/components/cat_detect",
                     ""
                 ]
             },
@@ -466,7 +473,6 @@
                 "_GNU_SOURCE",
                 "_GLIBCXX_USE_POSIX_SEMAPHORE",
                 "_GLIBCXX_HAVE_POSIX_SEMAPHORE",
-                "UNITY_INCLUDE_CONFIG_H",
                 "SOC_XTAL_FREQ_MHZ=CONFIG_XTAL_FREQ",
                 "SOC_MMU_PAGE_SIZE=CONFIG_MMU_PAGE_SIZE",
                 "MBEDTLS_CONFIG_FILE=\"mbedtls/esp_config.h\"",
