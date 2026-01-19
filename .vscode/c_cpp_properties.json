@@ -241,7 +241,7 @@
                 "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp-tflite-micro/third_party/flatbuffers/include",
                 "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp-tflite-micro/third_party/ruy",
                 "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp-tflite-micro/third_party/kissfft",
-                "/Users/sle/Projects/260114-213310-espidf-hello-world/components/litter_robot_detect_tflite/include",
+                "/Users/sle/Projects/260114-213310-espidf-hello-world/components/litter_robot_detect/include",
                 ""
             ],
             "browse": {
@@ -480,7 +480,7 @@
                     "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp-tflite-micro/third_party/flatbuffers/include",
                     "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp-tflite-micro/third_party/ruy",
                     "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp-tflite-micro/third_party/kissfft",
-                    "/Users/sle/Projects/260114-213310-espidf-hello-world/components/litter_robot_detect_tflite/include",
+                    "/Users/sle/Projects/260114-213310-espidf-hello-world/components/litter_robot_detect/include",
                     ""
                 ]
             },

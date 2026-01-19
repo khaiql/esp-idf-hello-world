@@ -41,7 +41,7 @@ esp_err_t myapp::CameraApp::setup_model()
 #ifdef CONFIG_DETECTION_CAT_DETECT
     detect = new CatDetect();
 #elif defined(CONFIG_DETECTION_LITTER_ROBOT_TFLITE)
-    detect = new litter_robot_detect_tflite::CatDetect();
+    detect = new litter_robot_detect::CatDetect();
     ESP_ERROR_CHECK(detect->setup(1024 * 1024));
     detect->test_model();
 

@@ -2136,6 +2136,13 @@ CONFIG_CAT_DETECT_MODEL_LOCATION=0
 # end of models: cat_detect
 
 #
+# Litter Robot Cat Detection Component
+#
+CONFIG_LITTER_ROBOT_MODEL_TFLITE=y
+# CONFIG_LITTER_ROBOT_MODEL_ESP_PPQ is not set
+# end of Litter Robot Cat Detection Component
+
+#
 # DSP Library
 #
 CONFIG_DSP_OPTIMIZATIONS_SUPPORTED=y

@@ -595,6 +595,21 @@ CONFIG_PARTITION_TABLE_MD5=y
 # end of Partition Table
 
 #
+# Detection Component Configuration
+#
+# CONFIG_DETECTION_CAT_DETECT is not set
+CONFIG_DETECTION_LITTER_ROBOT_TFLITE=y
+# end of Detection Component Configuration
+
+#
+# ESP-NN
+#
+# CONFIG_NN_ANSI_C is not set
+CONFIG_NN_OPTIMIZED=y
+CONFIG_NN_OPTIMIZATIONS=1
+# end of ESP-NN
+
+#
 # Compiler options
 #
 CONFIG_COMPILER_OPTIMIZATION_DEBUG=y
@@ -2259,6 +2274,13 @@ CONFIG_CAT_DETECT_MODEL_IN_FLASH_RODATA=y
 # CONFIG_CAT_DETECT_MODEL_IN_SDCARD is not set
 CONFIG_CAT_DETECT_MODEL_LOCATION=0
 # end of models: cat_detect
+
+#
+# Litter Robot Cat Detection Component
+#
+# CONFIG_LITTER_ROBOT_MODEL_TFLITE is not set
+CONFIG_LITTER_ROBOT_MODEL_ESP_PPQ=y
+# end of Litter Robot Cat Detection Component
 
 #
 # DSP Library

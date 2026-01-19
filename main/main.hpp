@@ -11,7 +11,7 @@
 #ifdef CONFIG_DETECTION_CAT_DETECT
 #include "cat_detect.hpp"
 #elif defined(CONFIG_DETECTION_LITTER_ROBOT_TFLITE)
-#include "litter_robot_detect_tflite.hpp"
+#include "litter_robot_detect.hpp"
 #endif
 #include "esp_http_server.h"
 
@@ -41,7 +41,7 @@ namespace myapp
 #ifdef CONFIG_DETECTION_CAT_DETECT
         CatDetect *detect;
 #elif defined(CONFIG_DETECTION_LITTER_ROBOT_TFLITE)
-        litter_robot_detect_tflite::CatDetect *detect;
+        litter_robot_detect::CatDetect *detect;
 #endif
         uint8_t current_tick = 0;
         static constexpr gpio_config_t io_config = gpio_config_t{
@@ -79,9 +79,9 @@ namespace myapp
             .frame_size = FRAMESIZE_VGA,
 #endif
             .jpeg_quality = 12,
-            .fb_count = 3,
+            .fb_count = 2,
             .fb_location = CAMERA_FB_IN_PSRAM,
-            .grab_mode = CAMERA_GRAB_LATEST,
+            .grab_mode = CAMERA_GRAB_WHEN_EMPTY,
             .sccb_i2c_port = 0};
     };
 } // namespace camera_app

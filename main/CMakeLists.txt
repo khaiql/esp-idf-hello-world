@@ -1,5 +1,5 @@
 # Base requirements
-set(requires esp32-camera esp_event esp_wifi nvs_flash esp_netif esp_http_server cat_detect litter_robot_detect_tflite)
+set(requires esp32-camera esp_event esp_wifi nvs_flash esp_netif esp_http_server cat_detect litter_robot_detect)
 
 
 idf_component_register(SRCS "main.cpp" "camera_pin.h" "wifi_manager.cpp"

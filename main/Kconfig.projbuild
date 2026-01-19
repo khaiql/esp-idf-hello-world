@@ -14,7 +14,7 @@ menu "Detection Component Configuration"
         config DETECTION_LITTER_ROBOT_TFLITE
             bool "Litter Robot Detect TFLite"
             help
-                Use the litter_robot_detect_tflite component for detection.
+                Use the litter_robot_detect component for detection.
 
     endchoice
 

@@ -1,14 +1,14 @@
 #include <stdio.h>
-#include "litter_robot_detect_tflite.hpp"
+#include "litter_robot_detect.hpp"
 #include "model_data.h"
 #include "esp_log.h"
 #include "esp_heap_caps.h"
 
-litter_robot_detect_tflite::CatDetect::CatDetect()
+litter_robot_detect::CatDetect::CatDetect()
 {
 }
 
-litter_robot_detect_tflite::CatDetect::~CatDetect()
+litter_robot_detect::CatDetect::~CatDetect()
 {
     if (interpreter)
     {
@@ -27,7 +27,7 @@ litter_robot_detect_tflite::CatDetect::~CatDetect()
     }
 }
 
-esp_err_t litter_robot_detect_tflite::CatDetect::setup(size_t tensor_arena_size)
+esp_err_t litter_robot_detect::CatDetect::setup(size_t tensor_arena_size)
 {
     // Load model
     model = tflite::GetModel(g_model_data);
@@ -76,7 +76,7 @@ esp_err_t litter_robot_detect_tflite::CatDetect::setup(size_t tensor_arena_size)
     return ESP_OK;
 }
 
-litter_robot_detect_tflite::prediction_result_t litter_robot_detect_tflite::CatDetect::run_inference(const camera_fb_t *fb)
+litter_robot_detect::prediction_result_t litter_robot_detect::CatDetect::run_inference(const camera_fb_t *fb)
 {
     prediction_result_t result;
     result.err = ESP_OK;
@@ -131,7 +131,7 @@ litter_robot_detect_tflite::prediction_result_t litter_robot_detect_tflite::CatD
     return result;
 }
 
-void litter_robot_detect_tflite::CatDetect::decode_result(prediction_result_t &result)
+void litter_robot_detect::CatDetect::decode_result(prediction_result_t &result)
 {
     // Handle different output types
     uint8_t empty_score, nachi_score, ngao_score;
@@ -157,7 +157,7 @@ void litter_robot_detect_tflite::CatDetect::decode_result(prediction_result_t &r
         return;
     }
 
-    ESP_LOGD(TAG, "empty_score=%d nachi_score=%d ngao_score=%d", empty_score, nachi_score, ngao_score);
+    ESP_LOGI(TAG, "empty_score=%d nachi_score=%d ngao_score=%d", empty_score, nachi_score, ngao_score);
 
     uint8_t scores[] = {empty_score, nachi_score, ngao_score};
     int max_index = 0;
@@ -173,36 +173,4 @@ void litter_robot_detect_tflite::CatDetect::decode_result(prediction_result_t &r
     result.nachi_score = nachi_score;
     result.ngao_score = ngao_score;
     result.predicted_class = CLASS_NAMES[max_index];
-}
-
-extern const uint8_t test_nachi_jpg_start[] asm("_binary_test_nachi_jpg_start");
-extern const uint8_t test_nachi_jpg_end[] asm("_binary_test_nachi_jpg_end");
-
-void litter_robot_detect_tflite::CatDetect::test_model()
-{
-    ESP_LOGI(TAG, "Testing model with embedded image test_nachi.jpg");
-
-    size_t test_image_len = test_nachi_jpg_end - test_nachi_jpg_start;
-
-    // Create a dummy camera frame buffer
-    camera_fb_t fb;
-    fb.buf = (uint8_t *)test_nachi_jpg_start;
-    fb.len = test_image_len;
-    fb.width = 0;  // Decoder might determine this, or set if known/needed
-    fb.height = 0; // Decoder might determine this, or set if known/needed
-    fb.format = PIXFORMAT_JPEG;
-
-    prediction_result_t result = run_inference(&fb);
-
-    if (result.err == ESP_OK)
-    {
-        ESP_LOGI(TAG, "Inference successful!");
-        ESP_LOGI(TAG, "Predicted Class: %s", result.predicted_class.c_str());
-        ESP_LOGI(TAG, "Scores - Empty: %d, Nachi: %d, Ngao: %d",
-                 result.empty_score, result.nachi_score, result.ngao_score);
-    }
-    else
-    {
-        ESP_LOGE(TAG, "Inference failed with error %d", result.err);
-    }
 }
