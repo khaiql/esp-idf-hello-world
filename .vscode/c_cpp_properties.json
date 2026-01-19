@@ -234,6 +234,14 @@
                 "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp-dl/audio/speech_features",
                 "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp-dl/dl/base/isa/xtensa",
                 "/Users/sle/Projects/260114-213310-espidf-hello-world/components/cat_detect",
+                "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp-nn/include",
+                "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp-nn/src/common",
+                "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp-tflite-micro",
+                "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp-tflite-micro/third_party/gemmlowp",
+                "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp-tflite-micro/third_party/flatbuffers/include",
+                "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp-tflite-micro/third_party/ruy",
+                "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp-tflite-micro/third_party/kissfft",
+                "/Users/sle/Projects/260114-213310-espidf-hello-world/components/litter_robot_detect_tflite/include",
                 ""
             ],
             "browse": {
@@ -465,10 +473,19 @@
                     "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp-dl/audio/speech_features",
                     "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp-dl/dl/base/isa/xtensa",
                     "/Users/sle/Projects/260114-213310-espidf-hello-world/components/cat_detect",
+                    "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp-nn/include",
+                    "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp-nn/src/common",
+                    "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp-tflite-micro",
+                    "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp-tflite-micro/third_party/gemmlowp",
+                    "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp-tflite-micro/third_party/flatbuffers/include",
+                    "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp-tflite-micro/third_party/ruy",
+                    "/Users/sle/Projects/260114-213310-espidf-hello-world/managed_components/espressif__esp-tflite-micro/third_party/kissfft",
+                    "/Users/sle/Projects/260114-213310-espidf-hello-world/components/litter_robot_detect_tflite/include",
                     ""
                 ]
             },
             "defines": [
+                "TF_LITE_STATIC_MEMORY",
                 "_POSIX_READER_WRITER_LOCKS",
                 "_GNU_SOURCE",
                 "_GLIBCXX_USE_POSIX_SEMAPHORE",

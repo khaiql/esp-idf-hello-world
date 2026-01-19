@@ -8,7 +8,11 @@
 #include "driver/gpio.h"
 #include "wifi_manager.hpp"
 #include "nvs_flash.h"
+#ifdef CONFIG_DETECTION_CAT_DETECT
 #include "cat_detect.hpp"
+#elif defined(CONFIG_DETECTION_LITTER_ROBOT_TFLITE)
+#include "litter_robot_detect_tflite.hpp"
+#endif
 #include "esp_http_server.h"
 
 namespace myapp
@@ -34,7 +38,11 @@ namespace myapp
         camera_fb_t *inference_fb;
 
     private:
+#ifdef CONFIG_DETECTION_CAT_DETECT
         CatDetect *detect;
+#elif defined(CONFIG_DETECTION_LITTER_ROBOT_TFLITE)
+        litter_robot_detect_tflite::CatDetect *detect;
+#endif
         uint8_t current_tick = 0;
         static constexpr gpio_config_t io_config = gpio_config_t{
             .pin_bit_mask = (1ULL << CAM_PIN_FLASH),
@@ -65,7 +73,11 @@ namespace myapp
             .ledc_timer = LEDC_TIMER_0,
             .ledc_channel = LEDC_CHANNEL_0,
             .pixel_format = PIXFORMAT_JPEG,
+#ifdef CONFIG_DETECTION_LITTER_ROBOT_TFLITE
+            .frame_size = FRAMESIZE_QCIF,
+#else
             .frame_size = FRAMESIZE_VGA,
+#endif
             .jpeg_quality = 12,
             .fb_count = 3,
             .fb_location = CAMERA_FB_IN_PSRAM,

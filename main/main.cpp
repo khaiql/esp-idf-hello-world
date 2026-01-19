@@ -7,7 +7,9 @@ myapp::CameraApp::CameraApp()
 
 myapp::CameraApp::~CameraApp()
 {
+#if defined(CONFIG_DETECTION_CAT_DETECT) || defined(CONFIG_DETECTION_LITTER_ROBOT_TFLITE)
     delete detect;
+#endif
 }
 
 esp_err_t myapp::CameraApp::setup_camera()
@@ -24,6 +26,7 @@ esp_err_t myapp::CameraApp::setup_camera()
     s->set_brightness(s, 1);
     s->set_saturation(s, -2);
     s->set_awb_gain(s, 1); // Enabled AWB gain control
+    s->set_wb_mode(s, 1);  // Cloudy mode
     err = gpio_config(&io_config);
     if (err != ESP_OK)
     {
@@ -35,7 +38,14 @@ esp_err_t myapp::CameraApp::setup_camera()
 
 esp_err_t myapp::CameraApp::setup_model()
 {
+#ifdef CONFIG_DETECTION_CAT_DETECT
     detect = new CatDetect();
+#elif defined(CONFIG_DETECTION_LITTER_ROBOT_TFLITE)
+    detect = new litter_robot_detect_tflite::CatDetect();
+    ESP_ERROR_CHECK(detect->setup(1024 * 1024));
+    detect->test_model();
+
+#endif
     return ESP_OK;
 }
 
@@ -78,6 +88,7 @@ void myapp::CameraApp::run_inference_task(void *pvParameters)
 
 void myapp::CameraApp::run_inference(const camera_fb_t *fb)
 {
+#ifdef CONFIG_DETECTION_CAT_DETECT
     uint32_t start_decode = esp_log_timestamp();
     dl::image::jpeg_img_t jpeg_img = {
         .data = fb->buf,
@@ -104,6 +115,21 @@ void myapp::CameraApp::run_inference(const camera_fb_t *fb)
                  res.box[3]);
     }
     heap_caps_free(img.data);
+#elifdef CONFIG_DETECTION_LITTER_ROBOT_TFLITE
+    uint32_t start_infer = esp_log_timestamp();
+    auto result = detect->run_inference(fb);
+    uint32_t end_infer = esp_log_timestamp();
+    ESP_LOGI(TAG, "Inference took %lu ms", end_infer - start_infer);
+    if (result.err != ESP_OK)
+    {
+        ESP_LOGE(TAG, "Inference error: 0x%x", result.err);
+        return;
+    }
+    else
+    {
+        ESP_LOGI(TAG, "Predicted class: %s", result.predicted_class.c_str());
+    }
+#endif
 }
 
 static esp_err_t myapp::stream_handler(httpd_req_t *req)

@@ -1,0 +1,21 @@
+menu "Detection Component Configuration"
+
+    choice DETECTION_COMPONENT
+        prompt "Select detection component"
+        default DETECTION_CAT_DETECT
+        help
+            Choose which detection component to use in the application.
+
+        config DETECTION_CAT_DETECT
+            bool "Cat Detect"
+            help
+                Use the cat_detect component for detection.
+
+        config DETECTION_LITTER_ROBOT_TFLITE
+            bool "Litter Robot Detect TFLite"
+            help
+                Use the litter_robot_detect_tflite component for detection.
+
+    endchoice
+
+endmenu
