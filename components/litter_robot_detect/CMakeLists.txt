@@ -1,4 +1,4 @@
-set(embed_files test_image.jpg)
+set(embed_files ${CMAKE_CURRENT_LIST_DIR}/test_image.jpg)
 set(requires esp32-camera)
 set(impl_srcs "litter_robot_detect_common.cpp")
 
