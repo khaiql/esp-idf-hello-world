@@ -237,16 +237,18 @@ litter_robot_detect::CatDetect::run_inference(const camera_fb_t *fb)
         }
     }
 
+#if ESP_LOG_LEVEL >= ESP_LOG_INFO
     for (int i = 0; i < 10; i++)
     {
-        ESP_LOGI(TAG, "Input tensor data[%d]=%d", i, input->data.uint8[i]);
+        ESP_LOGD(TAG, "Input tensor data[%d]=%d", i, input->data.uint8[i]);
     }
 
     // Print the last 10 bytes of the input tensor for debugging
     for (int i = input->bytes - 10; i < input->bytes; i++)
     {
-        ESP_LOGI(TAG, "Input tensor data[%d]=%d", i, input->data.uint8[i]);
+        ESP_LOGD(TAG, "Input tensor data[%d]=%d", i, input->data.uint8[i]);
     }
+#endif
 
     TfLiteStatus invokeStatus = this->interpreter->Invoke();
     if (invokeStatus != kTfLiteOk)
