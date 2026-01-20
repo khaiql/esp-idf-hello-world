@@ -1,6 +1,6 @@
 set(requires esp32-camera)
 set(impl_srcs "litter_robot_detect_common.cpp")
-set(image_file "test_image.jpg") # Use relative name for internal logic
+# set(image_file "test_image.jpg") # Use relative name for internal logic
 
 if(CONFIG_LITTER_ROBOT_MODEL_TFLITE)
     message(STATUS "Litter Robot Detect: Using TF LITE model")
@@ -32,7 +32,7 @@ idf_component_register(SRCS ${impl_srcs}
 # If using ESP-DL/PPQ, we use the aligned version. 
 # Otherwise, we use the standard absolute path trick which also fixes the PIO bug.
 if(COMMAND target_add_aligned_binary_data)
-    target_add_aligned_binary_data(${COMPONENT_LIB} "${CMAKE_CURRENT_LIST_DIR}/${image_file}" BINARY)
+    # target_add_aligned_binary_data(${COMPONENT_LIB} "${CMAKE_CURRENT_LIST_DIR}/${image_file}" BINARY)
     
     # 2. Also embed the Model if in PPQ mode
     if(model_files)
@@ -40,5 +40,5 @@ if(COMMAND target_add_aligned_binary_data)
     endif()
 else()
     # Standard ESP-IDF way with an absolute path (bypasses the PIO scanner bug)
-    target_add_binary_data(${COMPONENT_LIB} "${CMAKE_CURRENT_LIST_DIR}/${image_file}" BINARY)
+    # target_add_binary_data(${COMPONENT_LIB} "${CMAKE_CURRENT_LIST_DIR}/${image_file}" BINARY)
 endif()

@@ -1,13 +1,16 @@
 #include "litter_robot_detect.hpp"
 
+#ifdef LITTER_ROBOT_DETECT_TEST_STATIC_IMAGE
 extern "C"
 {
     extern const uint8_t _binary_test_image_jpg_start[] asm("_binary_test_image_jpg_start");
     extern const uint8_t _binary_test_image_jpg_end[] asm("_binary_test_image_jpg_end");
 }
+#endif
 
 void litter_robot_detect::CatDetect::test_model()
 {
+#ifdef LITTER_ROBOT_DETECT_TEST_STATIC_IMAGE
     ESP_LOGI(TAG, "Testing model with embedded image");
 
     size_t test_image_len = _binary_test_image_jpg_end - _binary_test_image_jpg_start;
@@ -33,4 +36,5 @@ void litter_robot_detect::CatDetect::test_model()
     {
         ESP_LOGE(TAG, "Inference failed with error %d", result.err);
     }
+#endif
 }
