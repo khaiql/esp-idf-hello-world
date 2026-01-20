@@ -1,5 +1,4 @@
 #include "main.hpp"
-#include "dl_image_jpeg.hpp"
 
 myapp::CameraApp::CameraApp()
 {

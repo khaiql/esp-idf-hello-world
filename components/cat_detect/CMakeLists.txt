@@ -1,3 +1,15 @@
+set(src_dirs        .)
+
+set(include_dirs    .)
+
+if(CONFIG_IDF_TARGET_ESP32)
+    message(STATUS "Cat Detect model is not supported on ESP32 target")
+
+    idf_component_register(SRC_DIRS ${src_dirs} INCLUDE_DIRS ${include_dirs})
+
+    return()
+endif()
+
 idf_build_get_property(component_targets __COMPONENT_TARGETS)
 if ("___idf_espressif__esp-dl" IN_LIST component_targets)
     idf_component_get_property(espdl_dir espressif__esp-dl COMPONENT_DIR)
@@ -6,10 +18,6 @@ elseif("___idf_esp-dl" IN_LIST component_targets)
 endif()
 set(cmake_dir ${espdl_dir}/fbs_loader/cmake)
 include(${cmake_dir}/utilities.cmake)
-
-set(src_dirs        .)
-
-set(include_dirs    .)
 
 set(requires        esp-dl)
 

@@ -10,6 +10,7 @@
 #include "nvs_flash.h"
 #ifdef CONFIG_DETECTION_CAT_DETECT
 #include "cat_detect.hpp"
+#include "dl_image_jpeg.hpp"
 #elif defined(CONFIG_DETECTION_LITTER_ROBOT_TFLITE)
 #include "litter_robot_detect.hpp"
 #endif
