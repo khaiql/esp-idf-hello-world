@@ -74,11 +74,7 @@ namespace myapp
             .ledc_timer = LEDC_TIMER_0,
             .ledc_channel = LEDC_CHANNEL_0,
             .pixel_format = PIXFORMAT_JPEG,
-#ifdef CONFIG_DETECTION_LITTER_ROBOT_TFLITE
-            .frame_size = FRAMESIZE_QCIF,
-#else
             .frame_size = FRAMESIZE_VGA,
-#endif
             .jpeg_quality = 12,
             .fb_count = 2,
             .fb_location = CAMERA_FB_IN_PSRAM,

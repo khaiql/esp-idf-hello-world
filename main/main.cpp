@@ -21,7 +21,19 @@ esp_err_t myapp::CameraApp::setup_camera()
     }
 
     sensor_t *s = esp_camera_sensor_get();
-    s->set_vflip(s, 1); // Flip vertically
+    if (s->id.PID == OV2640_PID)
+    {
+        ESP_LOGI(TAG, "OV2640 detected");
+    }
+    else if (s->id.PID == OV3660_PID)
+    {
+        ESP_LOGI(TAG, "OV3660 detected");
+        s->set_vflip(s, 1); // Flip vertically
+    }
+    else
+    {
+        ESP_LOGW(TAG, "Unknown sensor detected: PID=0x%02X", s->id.PID);
+    }
     s->set_brightness(s, 1);
     s->set_saturation(s, -2);
     s->set_awb_gain(s, 1); // Enabled AWB gain control
