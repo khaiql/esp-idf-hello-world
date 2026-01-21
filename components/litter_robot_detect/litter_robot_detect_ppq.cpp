@@ -5,9 +5,9 @@
 #include "model_data.h"
 #include <stdio.h>
 
-#ifndef CONFIG_LITTER_ROBOT_MODEL_ESP_PPQ
-#define CONFIG_LITTER_ROBOT_MODEL_ESP_PPQ = 1
-#endif
+// #ifndef CONFIG_LITTER_ROBOT_MODEL_ESP_PPQ
+// #define CONFIG_LITTER_ROBOT_MODEL_ESP_PPQ = 1
+// #endif
 
 #ifdef CONFIG_LITTER_ROBOT_MODEL_ESP_PPQ
 
